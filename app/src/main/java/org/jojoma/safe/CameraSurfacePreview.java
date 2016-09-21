@@ -6,7 +6,7 @@
  * @file: CameraSurfacePreview.java
  */
 
-package com.qualcomm.snapdragon.sdk.sample;
+package org.jojoma.safe;
 
 import java.io.IOException;
 import java.util.List;

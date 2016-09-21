@@ -6,15 +6,13 @@
  * @file: CameraPreviewActivity.java
  */
 
-package com.qualcomm.snapdragon.sdk.sample;
+package org.jojoma.safe;
 
 import java.util.EnumSet;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TestPreJoin.iml" filepath="$PROJECT_DIR$/TestPreJoin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Safetify.iml" filepath="$PROJECT_DIR$/Safetify.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

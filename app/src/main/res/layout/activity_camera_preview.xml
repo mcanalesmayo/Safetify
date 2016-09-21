@@ -14,7 +14,7 @@
     android:layout_height="wrap_content"
     android:background="#000000"
     android:gravity="top"
-    tools:context=".CameraPreviewActivity" >  
+    tools:context="org.jojoma.safe.CameraPreviewActivity" >
 
     <FrameLayout
         android:id="@+id/camera_preview"

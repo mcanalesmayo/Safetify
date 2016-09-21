@@ -6,7 +6,7 @@
  * @file: DrawView.java
  */
 
-package com.qualcomm.snapdragon.sdk.sample;
+package org.jojoma.safe;
 
 import android.content.Context;
 import android.graphics.Canvas;
