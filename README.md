@@ -6,7 +6,7 @@
 * [Jorge Martínez Lascorz](https://github.com/JorgeCoke)
 
 ## Description
-The application detects the previous symptoms of somnolence, fatigue, distractions, etc.
+The application detects previous symptoms of somnolence, fatigue, distractions, etc using facial recognition, and then notifies it to the driver.
 
 ## Requirements
 Android version >= 4.1.x
