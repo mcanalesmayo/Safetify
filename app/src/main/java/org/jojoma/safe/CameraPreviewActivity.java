@@ -12,6 +12,7 @@ import java.util.EnumSet;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -25,6 +26,8 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -507,6 +510,17 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 // Datos en la parte inferior
                 if (info) setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
                         horizontalGaze, verticalGaze);
+
+                // Send notification to the driver if there is a symptom
+                // if ( ... )
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+                mBuilder.setSmallIcon(R.drawable.ic_launcher);
+                mBuilder.setContentTitle("Custom title");
+                mBuilder.setContentText("Custom text");
+                // Customize notification
+                int mNotificationId = 1;
+                NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                mNotifyMgr.notify(mNotificationId, mBuilder.build());
             }
         }
     }
