@@ -127,7 +127,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
 
 
-        cameraIndex = Camera.getNumberOfCameras() - 1;// Start with front Camera
+        cameraIndex = FRONT_CAMERA_INDEX;// Start with front Camera
 
 
 
@@ -141,8 +141,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         // Change the sizes according to phone's compatibility.
         mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
-        preview.removeView(mPreview);
-        preview = (FrameLayout) findViewById(R.id.camera_preview);
+        //preview.removeView(mPreview);
+        //preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         cameraObj.setPreviewCallback(CameraPreviewActivity.this);
 
@@ -506,7 +506,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     verticalGaze = faceArray[j].getEyeVerticalGazeAngle();
                 }
                 // Datos en la parte inferior
-                setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
+                if (info) setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
                         horizontalGaze, verticalGaze);
             }
         }
