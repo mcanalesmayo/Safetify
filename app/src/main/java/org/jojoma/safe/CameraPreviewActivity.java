@@ -477,8 +477,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     FacialProcessing.FP_DATA.FACE_SMILE, FacialProcessing.FP_DATA.FACE_ORIENTATION,
                     FacialProcessing.FP_DATA.FACE_BLINK, FacialProcessing.FP_DATA.FACE_GAZE));
             // faceArray = faceProc.getFaceData(); // Calling getFaceData() alone will give you all facial data except the
-            // face
-            // contour. Face Contour might be a heavy operation, it is recommended that you use it only when you need it.
+            // face contour. Face Contour might be a heavy operation, it is recommended that you use it only when you need it.
             if (faceArray == null) {
                 Log.e("TAG", "Face array is null");
             } else {
