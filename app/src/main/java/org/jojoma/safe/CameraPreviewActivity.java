@@ -128,11 +128,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             return;
         }
 
-
-
         cameraIndex = FRONT_CAMERA_INDEX;// Start with front Camera
-
-
 
         try {
             cameraObj = Camera.open(cameraIndex); // attempt to get a Camera instance
@@ -153,10 +149,10 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         touchScreenListener();
 
         // Action listener for the Pause Button.
-        pauseActionListener();
+        //pauseActionListener();
 
         // Action listener for the Switch Camera Button.
-        cameraSwitchActionListener();
+        //cameraSwitchActionListener();
 
         orientationListener();
 
@@ -191,7 +187,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
      * Function for the screen touch action listener. On touching the screen, the face data info will be displayed.
      */
     private void touchScreenListener() {
-        preview.setOnTouchListener(new OnTouchListener() {
+        myView.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -234,7 +230,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     /*
      * Function for switch camera action listener. Switches camera from front to back and vice versa.
      */
-    private void cameraSwitchActionListener() {
+    /*private void cameraSwitchActionListener() {
         ImageView switchButton = (ImageView) findViewById(R.id.switchCameraButton);
 
         switchButton.setOnClickListener(new OnClickListener() {
@@ -266,12 +262,12 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             }
 
         });
-    }
+    }*/
 
     /*
      * Function for pause button action listener to pause and resume the preview.
      */
-    private void pauseActionListener() {
+    /*private void pauseActionListener() {
         ImageView pause = (ImageView) findViewById(R.id.pauseButton);
         pause.setOnClickListener(new OnClickListener() {
 
@@ -289,7 +285,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
             }
         });
-    }
+    }*/
 
     /*
      * This function will update the TextViews with the new values that come in.
@@ -508,7 +504,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     verticalGaze = faceArray[j].getEyeVerticalGazeAngle();
                 }
                 // Datos en la parte inferior
-                if (info) setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
+                setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
                         horizontalGaze, verticalGaze);
 
                 // Send notification to the driver if there is a symptom
