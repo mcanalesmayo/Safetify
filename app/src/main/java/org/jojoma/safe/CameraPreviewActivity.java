@@ -28,7 +28,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -42,6 +41,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qualcomm.snapdragon.sdk.face.FaceData;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing;
@@ -168,7 +168,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         //pauseActionListener();
 
         // Action listener for the Switch Camera Button.
-        //cameraSwitchActionListener();
+        openSettingsListener();
 
         orientationListener();
 
@@ -246,41 +246,18 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     }
 
     /*
-     * Function for switch camera action listener. Switches camera from front to back and vice versa.
+     * Function for open Seetings Menu
      */
-    /*private void cameraSwitchActionListener() {
-        ImageView switchButton = (ImageView) findViewById(R.id.switchCameraButton);
-
-        switchButton.setOnClickListener(new OnClickListener() {
-
+    private void openSettingsListener() {
+        ImageView openButton = (ImageView) findViewById(R.id.openSettingsButton);
+        openButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
-                if (!cameraSwitch)// If the camera is facing front then do this
-                {
-                    stopCamera();
-                    cameraObj = Camera.open(BACK_CAMERA_INDEX);
-                    mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
-                    preview = (FrameLayout) findViewById(R.id.camera_preview);
-                    preview.addView(mPreview);
-                    cameraSwitch = true;
-                    cameraObj.setPreviewCallback(CameraPreviewActivity.this);
-                } else						// If the camera is facing back then do this.
-                {
-                    stopCamera();
-                    cameraObj = Camera.open(FRONT_CAMERA_INDEX);
-                    preview.removeView(mPreview);
-                    mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
-                    preview = (FrameLayout) findViewById(R.id.camera_preview);
-                    preview.addView(mPreview);
-                    cameraSwitch = false;
-                    cameraObj.setPreviewCallback(CameraPreviewActivity.this);
-                }
-
+                Toast.makeText(CameraPreviewActivity.this, "Boton pulsado", Toast.LENGTH_SHORT).show();
             }
 
         });
-    }*/
+    }
 
     /*
      * Function for pause button action listener to pause and resume the preview.

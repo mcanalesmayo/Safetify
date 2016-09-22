@@ -141,22 +141,14 @@
 		android:text="Vertical Gaze: "
 		android:textColor="#FFA500" />
 
-    <!--<ImageView
-		android:id="@+id/pauseButton"
-		android:layout_width="50dp"
-		android:layout_height="50dp"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true"
-		android:scaleType="fitXY"
-		android:src="@drawable/pause" />
 
 	 <ImageView
-		android:id="@+id/switchCameraButton"
+		android:id="@+id/openSettingsButton"
 		android:layout_width="50dp"
 		android:layout_height="50dp"
 		android:layout_alignParentRight="true"
 		android:layout_alignParentTop="true"
 		android:scaleType="fitXY"
-		android:src="@drawable/switchcam" />-->
+		android:src="@drawable/openSettings" />
 
 </RelativeLayout>
