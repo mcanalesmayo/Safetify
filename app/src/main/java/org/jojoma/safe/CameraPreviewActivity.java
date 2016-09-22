@@ -26,6 +26,7 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -97,6 +98,10 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     Display display;
     int displayAngle;
 
+    Handler handler;
+    Runnable periodicTask;
+    static final long TASK_PERIOD = 200;
+
        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +120,17 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         horizontalGazeText = (TextView) findViewById(R.id.horizontalGazeAngle);
         verticalGazeText = (TextView) findViewById(R.id.verticalGazeAngle);
 
+           handler = new Handler();
+           periodicTask = new Runnable(){
+
+               @Override
+               public void run(){
+                   // Capture and detect
+
+                   // Delay N millis
+                   handler.postDelayed(periodicTask, TASK_PERIOD);
+               }
+           };
         // Check to see if the FacialProc feature is supported in the device or no.
         fpFeatureSupported = FacialProcessing
                 .isFeatureSupported(FacialProcessing.FEATURE_LIST.FEATURE_FACIAL_PROCESSING);
@@ -158,6 +174,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
+           // Start the periodic task
+           //handler.post(periodicTask);
     }
 
     FaceDetectionListener faceDetectionListener = new FaceDetectionListener() {
@@ -469,7 +487,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             canvas.drawColor(0, Mode.CLEAR);
             setUI(0, 0, 0, 0, 0, 0, 0, null, 0, 0);
         } else {
-
             Log.d("TAG", "Face Detected");
             faceArray = faceProc.getFaceData(EnumSet.of(FacialProcessing.FP_DATA.FACE_RECT,
                     FacialProcessing.FP_DATA.FACE_COORDINATES, FacialProcessing.FP_DATA.FACE_CONTOUR,
