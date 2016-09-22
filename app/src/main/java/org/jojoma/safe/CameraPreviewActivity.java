@@ -28,7 +28,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -42,6 +41,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qualcomm.snapdragon.sdk.face.FaceData;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing;
@@ -68,7 +68,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     // boolean clicked = false;
     boolean fpFeatureSupported = false;
     boolean cameraPause = false;        // Boolean to check if the "pause" button is pressed or no.
-    static boolean cameraSwitch = false;    // Boolean to check if the camera is switched to back camera or no.
+    //static boolean cameraSwitch = false;    // Boolean to check if the camera is switched to back camera or no.
     boolean info = false;       // Boolean to check if the face data info is displayed or no.
     boolean landScapeMode = false;      // Boolean to check if the phone orientation is in landscape mode or portrait mode.
 
@@ -156,19 +156,19 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         // Change the sizes according to phone's compatibility.
         mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
-        //preview.removeView(mPreview);
-        //preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.removeView(mPreview);
+        preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         cameraObj.setPreviewCallback(CameraPreviewActivity.this);
 
         // Action listener for the screen touch to display the face data info.
-        touchScreenListener();
+        //touchScreenListener();
 
         // Action listener for the Pause Button.
         //pauseActionListener();
 
         // Action listener for the Switch Camera Button.
-        //cameraSwitchActionListener();
+        openSettingsListener();
 
         orientationListener();
 
@@ -204,8 +204,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     /*
      * Function for the screen touch action listener. On touching the screen, the face data info will be displayed.
      */
-    private void touchScreenListener() {
-        myView.setOnTouchListener(new OnTouchListener() {
+    /*private void touchScreenListener() {
+        preview.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -243,44 +243,21 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             }
         });
 
-    }
+    }*/
 
     /*
-     * Function for switch camera action listener. Switches camera from front to back and vice versa.
+     * Function for open Seetings Menu
      */
-    /*private void cameraSwitchActionListener() {
-        ImageView switchButton = (ImageView) findViewById(R.id.switchCameraButton);
-
-        switchButton.setOnClickListener(new OnClickListener() {
-
+    private void openSettingsListener() {
+        ImageView openButton = (ImageView) findViewById(R.id.openSettingsButton);
+        openButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
-                if (!cameraSwitch)// If the camera is facing front then do this
-                {
-                    stopCamera();
-                    cameraObj = Camera.open(BACK_CAMERA_INDEX);
-                    mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
-                    preview = (FrameLayout) findViewById(R.id.camera_preview);
-                    preview.addView(mPreview);
-                    cameraSwitch = true;
-                    cameraObj.setPreviewCallback(CameraPreviewActivity.this);
-                } else						// If the camera is facing back then do this.
-                {
-                    stopCamera();
-                    cameraObj = Camera.open(FRONT_CAMERA_INDEX);
-                    preview.removeView(mPreview);
-                    mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
-                    preview = (FrameLayout) findViewById(R.id.camera_preview);
-                    preview.addView(mPreview);
-                    cameraSwitch = false;
-                    cameraObj.setPreviewCallback(CameraPreviewActivity.this);
-                }
-
+                Toast.makeText(CameraPreviewActivity.this, "Boton pulsado", Toast.LENGTH_SHORT).show();
             }
 
         });
-    }*/
+    }
 
     /*
      * Function for pause button action listener to pause and resume the preview.
@@ -349,10 +326,10 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             stopCamera();
         }
 
-        if (!cameraSwitch)
+        //if (!cameraSwitch)
             startCamera(FRONT_CAMERA_INDEX);
-        else
-            startCamera(BACK_CAMERA_INDEX);
+        //else
+        //    startCamera(BACK_CAMERA_INDEX);
     }
 
     /*
@@ -448,31 +425,30 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         surfaceHeight = mPreview.getHeight();
 
         // Landscape mode - front camera
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !cameraSwitch) {
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             faceProc.setFrame(data, previewSize.width, previewSize.height, true, angleEnum);
             cameraObj.setDisplayOrientation(displayAngle);
             landScapeMode = true;
         }
         // landscape mode - back camera
-        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
-                && cameraSwitch) {
-            faceProc.setFrame(data, previewSize.width, previewSize.height, false, angleEnum);
-            cameraObj.setDisplayOrientation(displayAngle);
-            landScapeMode = true;
-        }
+//        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+//                && cameraSwitch) {
+//            faceProc.setFrame(data, previewSize.width, previewSize.height, false, angleEnum);
+//            cameraObj.setDisplayOrientation(displayAngle);
+//            landScapeMode = true;
+//        }
         // Portrait mode - front camera
-        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                && !cameraSwitch) {
+        else  {
             faceProc.setFrame(data, previewSize.width, previewSize.height, true, angleEnum);
             cameraObj.setDisplayOrientation(displayAngle);
             landScapeMode = false;
         }
         // Portrait mode - back camera
-        else {
-            faceProc.setFrame(data, previewSize.width, previewSize.height, false, angleEnum);
-            cameraObj.setDisplayOrientation(displayAngle);
-            landScapeMode = false;
-        }
+//        else {
+//            faceProc.setFrame(data, previewSize.width, previewSize.height, false, angleEnum);
+//            cameraObj.setDisplayOrientation(displayAngle);
+//            landScapeMode = false;
+//        }
 
         int numFaces = faceProc.getNumFaces();
 
@@ -492,7 +468,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     FacialProcessing.FP_DATA.FACE_COORDINATES, FacialProcessing.FP_DATA.FACE_CONTOUR,
                     FacialProcessing.FP_DATA.FACE_SMILE, FacialProcessing.FP_DATA.FACE_ORIENTATION,
                     FacialProcessing.FP_DATA.FACE_BLINK, FacialProcessing.FP_DATA.FACE_GAZE));
-            // faceArray = faceProc.getFaceData(); // Calling getFaceData() alone will give you all facial data except the
+            //faceArray = faceProc.getFaceData(); // Calling getFaceData() alone will give you all facial data except the
             // face contour. Face Contour might be a heavy operation, it is recommended that you use it only when you need it.
             if (faceArray == null) {
                 Log.e("TAG", "Face array is null");
