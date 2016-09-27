@@ -153,13 +153,29 @@
 		app:rcIconSrc="@drawable/ic_launcher"
 		app:rcRadius="5dp" />
 
-	<ImageView
-		android:id="@+id/openSettingsButton"
-		android:layout_width="50dp"
-		android:layout_height="50dp"
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
 		android:layout_alignParentRight="true"
-		android:layout_alignParentTop="true"
-		android:scaleType="fitXY"
-		android:src="@drawable/opensettings" />
+		android:layout_alignParentTop="true">
+
+		<ImageView
+			android:id="@+id/openSettingsButton"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:src="@drawable/opensettings" />
+		<ImageView
+			android:id="@+id/openRecalibrateButton"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:src="@drawable/calibratesettings" />
+		<ImageView
+			android:id="@+id/openViewDataButton"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:src="@drawable/viewdatasettings" />
+
+	</LinearLayout>
 
 </RelativeLayout>

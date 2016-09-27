@@ -40,6 +40,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,11 +66,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     private final int FRONT_CAMERA_INDEX = 1;
     private final int BACK_CAMERA_INDEX = 0;
 
-    // boolean clicked = false;
     boolean fpFeatureSupported = false;
-    boolean cameraPause = false;        // Boolean to check if the "pause" button is pressed or no.
-    //static boolean cameraSwitch = false;    // Boolean to check if the camera is switched to back camera or no.
-    boolean info = false;       // Boolean to check if the face data info is displayed or no.
+    boolean info = true;       // Boolean to check if the face data info is displayed or no.
     boolean landScapeMode = false;      // Boolean to check if the phone orientation is in landscape mode or portrait mode.
 
     int cameraIndex;// Integer to keep track of which camera is open.
@@ -161,21 +159,15 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         preview.addView(mPreview);
         cameraObj.setPreviewCallback(CameraPreviewActivity.this);
 
-        // Action listener for the screen touch to display the face data info.
-        //touchScreenListener();
-
-        // Action listener for the Pause Button.
-        //pauseActionListener();
-
         // Action listener for the Switch Camera Button.
-        openSettingsListener();
+        ButtonsListeners();
 
         orientationListener();
 
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-           // Start the periodic task
-           //handler.post(periodicTask);
+        // Start the periodic task
+        //handler.post(periodicTask);
     }
 
     FaceDetectionListener faceDetectionListener = new FaceDetectionListener() {
@@ -202,58 +194,53 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     }
 
     /*
-     * Function for the screen touch action listener. On touching the screen, the face data info will be displayed.
+     * Function for Buttons Menu
      */
-    /*private void touchScreenListener() {
-        preview.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-
-                    if (!info) {
-                        LayoutParams layoutParams = preview.getLayoutParams();
-
-                        if (CameraPreviewActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            int oldHeight = preview.getHeight();
-                            layoutParams.height = oldHeight * 3 / 4;
-                        } else {
-                            int oldHeight = preview.getHeight();
-                            layoutParams.height = oldHeight * 80 / 100;
-                        }
-                        preview.setLayoutParams(layoutParams);// Setting the changed parameters for the layout.
-                        info = true;
-                    } else {
-                        LayoutParams layoutParams = preview.getLayoutParams();
-                        layoutParams.height = LayoutParams.WRAP_CONTENT;
-                        preview.setLayoutParams(layoutParams);// Setting the changed parameters for the layout.
-                        info = false;
-                    }
-                    break;
-
-                case MotionEvent.ACTION_MOVE:
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    break;
-                }
-
-                return true;
-            }
-        });
-
-    }*/
-
-    /*
-     * Function for open Seetings Menu
-     */
-    private void openSettingsListener() {
+    private void ButtonsListeners() {
         ImageView openButton = (ImageView) findViewById(R.id.openSettingsButton);
         openButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(CameraPreviewActivity.this, "Boton pulsado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CameraPreviewActivity.this, "Boton Settings pulsado", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        ImageView recalibrateButton = (ImageView) findViewById(R.id.openRecalibrateButton);
+        recalibrateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Toast.makeText(CameraPreviewActivity.this, "Boton Recalibrate pulsado", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        ImageView viewDataButton = (ImageView) findViewById(R.id.openViewDataButton);
+        viewDataButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Toast.makeText(CameraPreviewActivity.this, "Boton viewData pulsado", Toast.LENGTH_SHORT).show();
+                info = !info;
+                if(info){
+                    numFaceText.setVisibility(View.VISIBLE);
+                    smileValueText.setVisibility(View.VISIBLE);
+                    leftBlinkText.setVisibility(View.VISIBLE);
+                    rightBlinkText.setVisibility(View.VISIBLE);
+                    faceRollText.setVisibility(View.VISIBLE);
+                    faceYawText.setVisibility(View.VISIBLE);
+                    facePitchText.setVisibility(View.VISIBLE);
+                    horizontalGazeText.setVisibility(View.VISIBLE);
+                    verticalGazeText.setVisibility(View.VISIBLE);
+                }
+                else{
+                    numFaceText.setVisibility(View.INVISIBLE);
+                    smileValueText.setVisibility(View.INVISIBLE);
+                    leftBlinkText.setVisibility(View.INVISIBLE);
+                    rightBlinkText.setVisibility(View.INVISIBLE);
+                    faceRollText.setVisibility(View.INVISIBLE);
+                    faceYawText.setVisibility(View.INVISIBLE);
+                    facePitchText.setVisibility(View.INVISIBLE);
+                    horizontalGazeText.setVisibility(View.INVISIBLE);
+                    verticalGazeText.setVisibility(View.INVISIBLE);
+                }
             }
 
         });
@@ -496,9 +483,12 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     horizontalGaze = faceArray[j].getEyeHorizontalGazeAngle();
                     verticalGaze = faceArray[j].getEyeVerticalGazeAngle();
                 }
-                // Datos en la parte inferior
-                setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
-                        horizontalGaze, verticalGaze);
+
+                if(info){
+                    // Datos en pantalla
+                    setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
+                            horizontalGaze, verticalGaze);
+                }
 
                 // Send notification to the driver if there is a symptom
                 // if ( ... )
