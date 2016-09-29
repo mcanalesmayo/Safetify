@@ -32,7 +32,7 @@
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/progressBar"
 		android:text="Number of Faces: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -42,7 +42,7 @@
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/progressBar"
 		android:text="Smile Value: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -52,7 +52,7 @@
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/numFaces"
 		android:text="Gaze Point Value: ( , ) "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -62,7 +62,7 @@
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/smileValue"
 		android:text="Face Roll Value: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -72,7 +72,7 @@
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/gazePoint"
 		android:text="Left Eye Blink Value: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -82,7 +82,7 @@
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/gazePoint"
 		android:text="Right Eye Blink Value: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -92,7 +92,7 @@
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/leftEyeBlink"
 		android:text="Face Yaw Value: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -102,7 +102,7 @@
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/rightEyeBlink"
 		android:text="Face Pitch Value: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 
@@ -113,7 +113,7 @@
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/faceYawValue"
 		android:text="Horizontal Gaze: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<TextView
@@ -123,7 +123,7 @@
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/facePitchValue"
 		android:text="Vertical Gaze: "
-		android:textColor="#FFA500"
+		android:textColor="#FFFFFF"
 		android:background="#80000000"/>
 
 	<com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
@@ -192,6 +192,13 @@
 
 	</LinearLayout>
 
+	<ImageView
+		android:id="@+id/alertIcon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/alert_icon"
+		android:layout_centerInParent="true"
+		android:visibility="invisible"/>
 
 
 
