@@ -92,7 +92,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     Display display;
     int displayAngle;
 
-    private static final int TIMES_TO_CALIBRATE = 50;
+    private static final int TIMES_TO_CALIBRATE = 25;
     boolean calibrating = true;
     int calibratedTimes = 0;
     Handler handler;
@@ -160,10 +160,11 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                FaceRecogHelper.addPitchMeasure(pitch);
                FaceRecogHelper.addYawMeasure(yaw);
 
+               Log.d(TAG, "calibrating: " + calibrating);
                // Check if frame is used to calibrate
                if (calibrating){
                    calibratedTimes+=1;
-                   Log.d("ASD", "calibratedTimes: " + calibratedTimes);
+                   Log.d(TAG, "calibratedTimes: " + calibratedTimes);
                    if (calibratedTimes == TIMES_TO_CALIBRATE){
                        // Got all the necessary frames
                        FaceRecogHelper.setAllMeasureReferences();
@@ -174,18 +175,25 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                    // Check whether an alert should be popped up
                    List<Object> alertInfo = FaceRecogHelper.getAlertLevel();
                    changeProgress(progressBar, ((Double) alertInfo.get(1)).intValue());
+                   Log.d(TAG, "alert: " + (boolean) alertInfo.get(0));
                    if ((boolean) alertInfo.get(0)){
                        // Pop up an alert
-                       mp.start();
+                       if (!mp.isPlaying()) {
+                           Log.d(TAG, "starting sound");
+                           mp.start();
+                       }
                        alertIcon.setVisibility(View.VISIBLE);
                    }
                    else{
                        // Stop alert
-                       mp.stop();
-                       try {
-                           mp.prepare();
-                       } catch (IOException e) {
-                           e.printStackTrace();
+                       if (mp.isPlaying()) {
+                           Log.d(TAG, "stopping sound");
+                           mp.stop();
+                           try {
+                               mp.prepare();
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
                        }
                        alertIcon.setVisibility(View.INVISIBLE);
                    }
