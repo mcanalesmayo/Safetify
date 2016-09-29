@@ -174,19 +174,21 @@
 		android:layout_alignParentTop="true"
 		android:layout_alignTop="@+id/progressBar">
 
-		<pl.droidsonroids.gif.GifImageView
-			android:id="@+id/calibrateImg"
-			android:layout_width="50dp"
-			android:layout_height="50dp"
-			android:src="@drawable/loading"
-			android:background="@drawable/loading"
-			/>
-
-		<TextView
+		<ProgressBar
+			android:id="@+id/calibrating_circle"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:labelFor="@+id/btn_toggle"
+			style="@android:style/Widget.ProgressBar.Large"
+			android:visibility="invisible"/>
+
+		<TextView
+			android:id="@+id/calibrating_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:labelFor="@+id/calibrating_circle"
+			android:visibility="invisible"
 			android:text="Calibrando..."/>
+
 
 	</LinearLayout>
 
