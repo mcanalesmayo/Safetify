@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff.Mode;
@@ -18,6 +19,7 @@ import android.hardware.Camera.FaceDetectionListener;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
@@ -77,6 +79,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     TextView numFaceText, smileValueText, leftBlinkText, rightBlinkText, gazePointText, faceRollText, faceYawText,
     facePitchText, horizontalGazeText, verticalGazeText, gazePoint;
 
+    ImageView alertIcon;
+
     // Progress bar
     RoundCornerProgressBar progressBar;
 
@@ -93,6 +97,15 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     Handler handler;
     Runnable periodicTask;
     static final long TASK_PERIOD = 200;
+
+    final static int COLOR_20 = Color.parseColor("#99e527");
+    final static int COLOR_40 = Color.parseColor("#dfe527");
+    final static int COLOR_60 = Color.parseColor("#e5a927");
+    final static int COLOR_80 = Color.parseColor("#e56627");
+    final static int COLOR_100 = Color.parseColor("#e52727");
+
+    MediaPlayer mp;
+
 
        @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +137,10 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         verticalGazeText = (TextView) findViewById(R.id.verticalGazeAngle);
         progressBar = (RoundCornerProgressBar) findViewById(R.id.progressBar);
         gazePoint = (TextView) findViewById(R.id.gazePoint);
+
+        alertIcon = (ImageView) findViewById(R.id.alertIcon);
+
+        mp = MediaPlayer.create(this,R.raw.alarm);
 
         handler = new Handler();
         periodicTask = new Runnable(){
@@ -209,7 +226,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         openButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(CameraPreviewActivity.this, "Boton Settings pulsado", Toast.LENGTH_SHORT).show();
+                changeProgress(progressBar,10);
+
             }
 
         });
@@ -217,9 +235,16 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         recalibrateButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                progressBar.setProgress((float) 90.0);
-                //progressBar.setProgressColor(getResources().getColor(R.color.round_corner_progress_bar_secondary_progress_default));
-                Toast.makeText(CameraPreviewActivity.this, "Boton Recalibrate pulsado", Toast.LENGTH_SHORT).show();
+                //TODO: Ejemplo de cambio de progreso de barra
+                changeProgress(progressBar, (int)progressBar.getProgress() + 11);
+                //TODO: Ejemplo de alerta y icono
+                if (progressBar.getProgress() > 50.0){
+                    mp.start();
+                    alertIcon.setVisibility(View.VISIBLE);
+                }
+                else{
+                    alertIcon.setVisibility(View.INVISIBLE);
+                }
             }
 
         });
@@ -227,64 +252,57 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         viewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(CameraPreviewActivity.this, "Boton viewData pulsado", Toast.LENGTH_SHORT).show();
                 info = !info;
                 if(info){
-                    numFaceText.setVisibility(View.VISIBLE);
-                    smileValueText.setVisibility(View.VISIBLE);
-                    leftBlinkText.setVisibility(View.VISIBLE);
-                    rightBlinkText.setVisibility(View.VISIBLE);
-                    faceRollText.setVisibility(View.VISIBLE);
-                    faceYawText.setVisibility(View.VISIBLE);
-                    facePitchText.setVisibility(View.VISIBLE);
-                    horizontalGazeText.setVisibility(View.VISIBLE);
-                    verticalGazeText.setVisibility(View.VISIBLE);
-                    gazePoint.setVisibility(View.VISIBLE);
+                    setUIData(View.VISIBLE);
                 }
                 else{
-                    numFaceText.setVisibility(View.INVISIBLE);
-                    smileValueText.setVisibility(View.INVISIBLE);
-                    leftBlinkText.setVisibility(View.INVISIBLE);
-                    rightBlinkText.setVisibility(View.INVISIBLE);
-                    faceRollText.setVisibility(View.INVISIBLE);
-                    faceYawText.setVisibility(View.INVISIBLE);
-                    facePitchText.setVisibility(View.INVISIBLE);
-                    horizontalGazeText.setVisibility(View.INVISIBLE);
-                    verticalGazeText.setVisibility(View.INVISIBLE);
-                    gazePoint.setVisibility(View.INVISIBLE);
+                    setUIData(View.INVISIBLE);
                 }
             }
 
         });
     }
 
-    /*
-     * Function for pause button action listener to pause and resume the preview.
-     */
-    /*private void pauseActionListener() {
-        ImageView pause = (ImageView) findViewById(R.id.pauseButton);
-        pause.setOnClickListener(new OnClickListener() {
+    private void changeProgress (RoundCornerProgressBar pg, int percentage){
+        pg.setProgress( (float) percentage);
+        if (percentage <= 20){
+            pg.setProgressColor(COLOR_20);
+        }
+        else if (percentage <= 40){
+            pg.setProgressColor(COLOR_40);
 
-            @Override
-            public void onClick(View arg0) {
+        }
+        else if (percentage <= 60){
+            pg.setProgressColor(COLOR_60);
 
-                if (!cameraPause) {
-                    cameraObj.stopPreview();
-                    cameraPause = true;
-                } else {
-                    cameraObj.startPreview();
-                    cameraObj.setPreviewCallback(CameraPreviewActivity.this);
-                    cameraPause = false;
-                }
+        }
+        else if (percentage <= 80){
+            pg.setProgressColor(COLOR_80);
 
-            }
-        });
-    }*/
+        }
+        else{
+            pg.setProgressColor(COLOR_100);
+
+        }
+    }
+
+    private void setUIData(int type){
+        numFaceText.setVisibility(type);
+        smileValueText.setVisibility(type);
+        leftBlinkText.setVisibility(type);
+        rightBlinkText.setVisibility(type);
+        faceRollText.setVisibility(type);
+        faceYawText.setVisibility(type);
+        facePitchText.setVisibility(type);
+        horizontalGazeText.setVisibility(type);
+        verticalGazeText.setVisibility(type);
+        gazePoint.setVisibility(type);
+    }
 
     /*
      * This function will update the TextViews with the new values that come in.
      */
-
     public void setUI(int numFaces, int smileValue, int leftEyeBlink, int rightEyeBlink, int faceRollValue,
             int faceYawValue, int facePitchValue, PointF gazePointValue, int horizontalGazeAngle, int verticalGazeAngle) {
 
@@ -325,10 +343,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             stopCamera();
         }
 
-        //if (!cameraSwitch)
-            startCamera(FRONT_CAMERA_INDEX);
-        //else
-        //    startCamera(BACK_CAMERA_INDEX);
+        startCamera(FRONT_CAMERA_INDEX);
+
     }
 
     /*
@@ -343,7 +359,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             faceProc.release();
             faceProc = null;
         }
-
         cameraObj = null;
     }
 
@@ -429,25 +444,12 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             cameraObj.setDisplayOrientation(displayAngle);
             landScapeMode = true;
         }
-        // landscape mode - back camera
-//        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
-//                && cameraSwitch) {
-//            faceProc.setFrame(data, previewSize.width, previewSize.height, false, angleEnum);
-//            cameraObj.setDisplayOrientation(displayAngle);
-//            landScapeMode = true;
-//        }
         // Portrait mode - front camera
         else  {
             faceProc.setFrame(data, previewSize.width, previewSize.height, true, angleEnum);
             cameraObj.setDisplayOrientation(displayAngle);
             landScapeMode = false;
         }
-        // Portrait mode - back camera
-//        else {
-//            faceProc.setFrame(data, previewSize.width, previewSize.height, false, angleEnum);
-//            cameraObj.setDisplayOrientation(displayAngle);
-//            landScapeMode = false;
-//        }
 
         int numFaces = faceProc.getNumFaces();
 
