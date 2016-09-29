@@ -1,6 +1,8 @@
 package org.jojoma.safe;
 
+import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -34,16 +36,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.qualcomm.snapdragon.sdk.face.FaceData;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing.FP_MODES;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing.PREVIEW_ROTATION_ANGLE;
-
-import pl.droidsonroids.gif.GifImageView;
 
 @SuppressLint("NewApi")
 public class CameraPreviewActivity extends Activity implements Camera.PreviewCallback {
@@ -56,11 +54,9 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     FaceData[] faceArray = null;// Array in which all the face data values will be returned for each face detected.
     View myView;
     Canvas canvas = new Canvas();
-    Paint rectBrush = new Paint();
     private CameraSurfacePreview mPreview;
     private DrawView drawView;
     private final int FRONT_CAMERA_INDEX = 1;
-    private final int BACK_CAMERA_INDEX = 0;
 
     boolean fpFeatureSupported = false;
     boolean info = true;       // Boolean to check if the face data info is displayed or no.
@@ -93,7 +89,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     OrientationEventListener orientationEventListener;
     int deviceOrientation;
     int presentOrientation;
-    float rounded;
     Display display;
     int displayAngle;
 
@@ -112,8 +107,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
     MediaPlayer mp;
 
-
-       @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final String PREFS_NAME = "Preferencias";
@@ -159,17 +153,50 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
            @Override
            public void run(){
-               // Capture and detect
+               // Save params
+               FaceRecogHelper.addLeftEyeMeasure(leftEyeBlink);
+               FaceRecogHelper.addRightEyeMeasure(rightEyeBlink);
+               FaceRecogHelper.addRollMeasure(faceRollValue);
+               FaceRecogHelper.addPitchMeasure(pitch);
+               FaceRecogHelper.addYawMeasure(yaw);
 
-
+               // Check if frame is used to calibrate
+               if (calibrating){
+                   calibratedTimes+=1;
+                   Log.d("ASD", "calibratedTimes: " + calibratedTimes);
+                   if (calibratedTimes == TIMES_TO_CALIBRATE){
+                       // Got all the necessary frames
+                       FaceRecogHelper.setAllMeasureReferences();
+                       calibrating = false;
+                   }
+               }
+               else{
+                   // Check whether an alert should be popped up
+                   List<Object> alertInfo = FaceRecogHelper.getAlertLevel();
+                   changeProgress(progressBar, ((Double) alertInfo.get(1)).intValue());
+                   if ((boolean) alertInfo.get(0)){
+                       // Pop up an alert
+                       mp.start();
+                       alertIcon.setVisibility(View.VISIBLE);
+                   }
+                   else{
+                       // Stop alert
+                       mp.stop();
+                       try {
+                           mp.prepare();
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
+                       alertIcon.setVisibility(View.INVISIBLE);
+                   }
+               }
                // Delay N millis
                handler.postDelayed(periodicTask, TASK_PERIOD);
            }
         };
 
         // Check to see if the FacialProc feature is supported in the device or no.
-        fpFeatureSupported = FacialProcessing
-                .isFeatureSupported(FacialProcessing.FEATURE_LIST.FEATURE_FACIAL_PROCESSING);
+        fpFeatureSupported = FacialProcessing.isFeatureSupported(FacialProcessing.FEATURE_LIST.FEATURE_FACIAL_PROCESSING);
 
         if (fpFeatureSupported && faceProc == null) {
             Log.e("TAG", "Feature is supported");
@@ -205,7 +232,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
         // Start the periodic task
-        // handler.post(periodicTask);
+        handler.post(periodicTask);
     }
 
     FaceDetectionListener faceDetectionListener = new FaceDetectionListener() {
@@ -483,8 +510,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     FacialProcessing.FP_DATA.FACE_COORDINATES, FacialProcessing.FP_DATA.FACE_CONTOUR,
                     FacialProcessing.FP_DATA.FACE_SMILE, FacialProcessing.FP_DATA.FACE_ORIENTATION,
                     FacialProcessing.FP_DATA.FACE_BLINK, FacialProcessing.FP_DATA.FACE_GAZE));
-            //faceArray = faceProc.getFaceData(); // Calling getFaceData() alone will give you all facial data except the
-            // face contour. Face Contour might be a heavy operation, it is recommended that you use it only when you need it.
             if (faceArray == null) {
                 Log.e("TAG", "Face array is null");
             } else {
@@ -494,7 +519,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     Log.e(TAG, "Eye Object not NULL");
                 }
 
-                // Imagen más dibujos
                 faceProc.normalizeCoordinates(surfaceWidth, surfaceHeight);
                 preview.removeView(drawView);// Remove the previously created view to avoid unnecessary stacking of Views.
                 drawView = new DrawView(this, faceArray, true, surfaceWidth, surfaceHeight, cameraObj, landScapeMode);
@@ -513,23 +537,9 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 }
 
                 if(info){
-                    // Datos en pantalla
+                    // Show data
                     setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
                             horizontalGaze, verticalGaze);
-                }
-
-                calibratedTimes+=1;
-
-                FaceRecogHelper.addLeftEyeMeasure(leftEyeBlink);
-                FaceRecogHelper.addRightEyeMeasure(rightEyeBlink);
-                FaceRecogHelper.addHeadIncMeasure(leftEyeBlink);
-
-                if (calibratedTimes == TIMES_TO_CALIBRATE){
-                    // Ya hemos conseguido todas las muestras para el calibrado
-                    calibrating = false;
-                }
-                else{
-                    // Ya hemos hecho el calibrado previamente
                 }
 
                 // Send notification to the driver if there is a symptom
