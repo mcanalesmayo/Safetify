@@ -55,23 +55,26 @@ public class DrawView extends SurfaceView {
             for (int i = 0; i < mFaceArray.length; i++) {
                 if (mFaceArray[i].leftEye != null) {
                     leftEyeBrush.setColor(Color.MAGENTA);
-                    canvas.drawCircle(mFaceArray[i].leftEye.x * scaleX, mFaceArray[i].leftEye.y * scaleY, 7f,
-                            leftEyeBrush);
-                    canvas.drawOval((mFaceArray[i].leftEye.x - 10f) * scaleX, (mFaceArray[i].leftEye.y + 5f) * scaleY, (mFaceArray[i].leftEye.x + 10f) * scaleX, (mFaceArray[i].leftEye.y - 5f) * scaleY, leftEyeBrush);
+                    leftEyeBrush.setStyle(Paint.Style.STROKE);
 
-                    Log.e("TAG","Uno: "+mFaceArray[i].leftEye.x);
-                    Log.e("TAG","Dos: "+(mFaceArray[i].leftEye.x - 10f));
-                    Log.e("TAG","Dos: "+(mFaceArray[i].leftEye.x - 10f) * scaleX);
+                    canvas.drawCircle(mFaceArray[i].leftEye.x * scaleX, mFaceArray[i].leftEye.y * scaleY, 25f,
+                            leftEyeBrush);
+                    //canvas.drawOval((mFaceArray[i].leftEye.x - 10f) * scaleX, (mFaceArray[i].leftEye.y + 5f) * scaleY, (mFaceArray[i].leftEye.x + 10f) * scaleX, (mFaceArray[i].leftEye.y - 5f) * scaleY, leftEyeBrush);
+
+                    //Log.e("TAG","Uno: "+mFaceArray[i].leftEye.x);
+                    //Log.e("TAG","Dos: "+(mFaceArray[i].leftEye.x - 10f));
+                    //Log.e("TAG","Tres: "+(mFaceArray[i].leftEye.x - 10f) * scaleX);
 
                     rightEyeBrush.setColor(Color.YELLOW);
-                    canvas.drawCircle(mFaceArray[i].rightEye.x * scaleX, mFaceArray[i].rightEye.y * scaleY, 7f,
+                    rightEyeBrush.setStyle(Paint.Style.STROKE);
+                    canvas.drawCircle(mFaceArray[i].rightEye.x * scaleX, mFaceArray[i].rightEye.y * scaleY, 25f,
                             rightEyeBrush);
 
                     mouthBrush.setColor(Color.WHITE);
                     canvas.drawCircle(mFaceArray[i].mouth.x * scaleX, mFaceArray[i].mouth.y * scaleY, 5f, mouthBrush);
                 }
                 if (mFaceArray[i].leftEyeObj != null) {
-                    mouthBrush.setColor(Color.CYAN);
+                    mouthBrush.setColor(Color.WHITE);
                     canvas.drawCircle(mFaceArray[i].mouthObj.left.x, mFaceArray[i].mouthObj.left.y, 5f, mouthBrush);
                     canvas.drawCircle(mFaceArray[i].mouthObj.right.x, mFaceArray[i].mouthObj.right.y, 5f, mouthBrush);
                     canvas.drawCircle(mFaceArray[i].mouthObj.upperLipTop.x, mFaceArray[i].mouthObj.upperLipTop.y, 5f,
@@ -157,11 +160,12 @@ public class DrawView extends SurfaceView {
                     canvas.drawCircle(mFaceArray[i].nose.noseUpperRight.x * scaleX, mFaceArray[i].nose.noseUpperRight.y
                             * scaleY, 5f, mouthBrush);
                 }
-                rectBrush.setColor(Color.YELLOW);
+                rectBrush.setColor(Color.GREEN);
                 rectBrush.setStyle(Paint.Style.STROKE);
-                canvas.drawRect(mFaceArray[i].rect.left * scaleX, mFaceArray[i].rect.top * scaleY,
-                        mFaceArray[i].rect.right * scaleX, mFaceArray[i].rect.bottom * scaleY, rectBrush);
-
+                //canvas.drawRect(mFaceArray[i].rect.left * scaleX, mFaceArray[i].rect.top * scaleY, mFaceArray[i].rect.right * scaleX, mFaceArray[i].rect.bottom * scaleY, rectBrush);
+                //canvas.drawCircle(mFaceArray[i].rect.left * scaleX + ((mFaceArray[i].rect.right * scaleX-mFaceArray[i].rect.left * scaleX)/2), mFaceArray[i].rect.bottom * scaleY + ((mFaceArray[i].rect.top * scaleX-mFaceArray[i].rect.bottom * scaleY)/2), 500f, rectBrush);
+                canvas.drawCircle(mFaceArray[i].nose.noseCenter.x * scaleX, mFaceArray[i].nose.noseCenter.y
+                        * scaleY, ((mFaceArray[i].rect.right * scaleX-mFaceArray[i].rect.left * scaleX)/2), rectBrush);
             }
         } else {
             canvas.drawColor(0, Mode.CLEAR);
