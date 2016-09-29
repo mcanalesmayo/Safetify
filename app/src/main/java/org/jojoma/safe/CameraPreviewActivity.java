@@ -150,12 +150,9 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         progressBar = (RoundCornerProgressBar) findViewById(R.id.progressBar);
         gazePoint = (TextView) findViewById(R.id.gazePoint);
 
-<<<<<<< HEAD
-=======
         alertIcon = (ImageView) findViewById(R.id.alertIcon);
 
         mp = MediaPlayer.create(this,R.raw.alarm);
->>>>>>> origin/tmp
 
         handler = new Handler();
         periodicTask = new Runnable(){
