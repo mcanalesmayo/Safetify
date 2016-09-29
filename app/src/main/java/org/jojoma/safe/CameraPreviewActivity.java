@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff.Mode;
 import android.hardware.Camera;
@@ -46,12 +45,10 @@ import com.qualcomm.snapdragon.sdk.face.FacialProcessing.PREVIEW_ROTATION_ANGLE;
 @SuppressLint("NewApi")
 public class CameraPreviewActivity extends Activity implements Camera.PreviewCallback {
 
-    // Global Variables Required
-
     Camera cameraObj;
     FrameLayout preview;
     FacialProcessing faceProc;
-    FaceData[] faceArray = null;// Array in which all the face data values will be returned for each face detected.
+    FaceData[] faceArray = null;
     View myView;
     Canvas canvas = new Canvas();
     private CameraSurfacePreview mPreview;
@@ -59,8 +56,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     private final int FRONT_CAMERA_INDEX = 1;
 
     boolean fpFeatureSupported = false;
-    boolean info = true;       // Boolean to check if the face data info is displayed or no.
-    boolean landScapeMode = false;      // Boolean to check if the phone orientation is in landscape mode or portrait mode.
+    boolean info = true;
+    boolean landScapeMode = false;
 
     int cameraIndex;// Integer to keep track of which camera is open.
     int smileValue = 0;
@@ -113,6 +110,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         final String PREFS_NAME = "Preferencias";
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //TODO: PARA CAMBIAR ENTRE PRIMER PLANO O SEGUNDO PLANO
         //Primer Plano
@@ -250,14 +248,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         handler.post(periodicTask);
     }
 
-    FaceDetectionListener faceDetectionListener = new FaceDetectionListener() {
-
-        @Override
-        public void onFaceDetection(Face[] faces, Camera camera) {
-            Log.e(TAG, "Faces Detected through FaceDetectionListener = " + faces.length);
-        }
-    };
-
     private void orientationListener() {
         orientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
             @Override
@@ -273,35 +263,22 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         presentOrientation = 90 * (deviceOrientation / 360) % 360;
     }
 
-    /*
-     * Function for Buttons Menu
-     */
     private void ButtonsListeners() {
-        ImageView openButton = (ImageView) findViewById(R.id.openSettingsButton);
-        openButton.setOnClickListener(new OnClickListener() {
+        ImageView openSettingsButton = (ImageView) findViewById(R.id.openSettingsButton);
+        openSettingsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                changeProgress(progressBar,10);
-
+                changeProgress(progressBar, 10);
             }
-
         });
         ImageView recalibrateButton = (ImageView) findViewById(R.id.openRecalibrateButton);
         recalibrateButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //TODO: Ejemplo de cambio de progreso de barra
-                changeProgress(progressBar, (int)progressBar.getProgress() + 11);
-                //TODO: Ejemplo de alerta y icono
-                if (progressBar.getProgress() > 50.0){
-                    mp.start();
-                    alertIcon.setVisibility(View.VISIBLE);
-                }
-                else{
-                    alertIcon.setVisibility(View.INVISIBLE);
-                }
+                changeProgress(progressBar, 0);
+                calibratedTimes = 0;
+                calibrating = true;
             }
-
         });
         ImageView viewDataButton = (ImageView) findViewById(R.id.openViewDataButton);
         viewDataButton.setOnClickListener(new OnClickListener() {
@@ -315,7 +292,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     setUIData(View.INVISIBLE);
                 }
             }
-
         });
     }
 
@@ -326,19 +302,15 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         }
         else if (percentage <= 40){
             pg.setProgressColor(COLOR_40);
-
         }
         else if (percentage <= 60){
             pg.setProgressColor(COLOR_60);
-
         }
         else if (percentage <= 80){
             pg.setProgressColor(COLOR_80);
-
         }
         else{
             pg.setProgressColor(COLOR_100);
-
         }
     }
 
@@ -355,12 +327,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         gazePoint.setVisibility(type);
     }
 
-    /*
-     * This function will update the TextViews with the new values that come in.
-     */
     public void setUI(int numFaces, int smileValue, int leftEyeBlink, int rightEyeBlink, int faceRollValue,
             int faceYawValue, int facePitchValue, PointF gazePointValue, int horizontalGazeAngle, int verticalGazeAngle) {
-
         numFaceText.setText("Number of Faces: " + numFaces);
         smileValueText.setText("Smile Value: " + smileValue);
         leftBlinkText.setText("Left Eye Blink Value: " + leftEyeBlink);
@@ -399,12 +367,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         }
 
         startCamera(FRONT_CAMERA_INDEX);
-
     }
 
-    /*
-     * This is a function to stop the camera preview. Release the appropriate objects for later use.
-     */
     public void stopCamera() {
         if (cameraObj != null) {
             cameraObj.stopPreview();
@@ -417,22 +381,16 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         cameraObj = null;
     }
 
-    /*
-     * This is a function to start the camera preview. Call the appropriate constructors and objects.
-     * @param-cameraIndex: Will specify which camera (front/back) to start.
-     */
     public void startCamera(int cameraIndex) {
-
         if (fpFeatureSupported && faceProc == null) {
-
             Log.e("TAG", "Feature is supported");
-            faceProc = FacialProcessing.getInstance();// Calling the Facial Processing Constructor.
+            faceProc = FacialProcessing.getInstance();
         }
 
         try {
-            cameraObj = Camera.open(cameraIndex);// attempt to get a Camera instance
+            cameraObj = Camera.open(cameraIndex);
         } catch (Exception e) {
-            Log.d("TAG", "Camera Does Not exist");// Camera is not available (in use or does not exist)
+            Log.d("TAG", "Camera Does Not exist");
         }
 
         mPreview = new CameraSurfacePreview(CameraPreviewActivity.this, cameraObj, faceProc);
@@ -440,22 +398,14 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         cameraObj.setPreviewCallback(CameraPreviewActivity.this);
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.camera_preview, menu);
         return true;
     }
 
-    /*
-     * Detecting the face according to the new Snapdragon SDK. Face detection will now take place in this function.
-     * 1) Set the Frame
-     * 2) Detect the Number of faces.
-     * 3) If(numFaces > 0) then do the necessary processing.
-     */
     @Override
     public void onPreviewFrame(byte[] data, Camera arg1) {
 
@@ -468,16 +418,13 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             displayAngle = 270;
             angleEnum = PREVIEW_ROTATION_ANGLE.ROT_270;
             break;
-
         case 1:
             displayAngle = 180;
             angleEnum = PREVIEW_ROTATION_ANGLE.ROT_180;
             break;
-
         case 2:
             // This case is never reached.
             break;
-
         case 3:
             displayAngle = 0;
             angleEnum = PREVIEW_ROTATION_ANGLE.ROT_0;
@@ -512,7 +459,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             Log.d("TAG", "No Face Detected");
             if (drawView != null) {
                 preview.removeView(drawView);
-
                 drawView = new DrawView(this, null, false, 0, 0, null, landScapeMode);
                 preview.addView(drawView);
             }
@@ -535,7 +481,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 }
 
                 faceProc.normalizeCoordinates(surfaceWidth, surfaceHeight);
-                preview.removeView(drawView);// Remove the previously created view to avoid unnecessary stacking of Views.
+                preview.removeView(drawView);
                 drawView = new DrawView(this, faceArray, true, surfaceWidth, surfaceHeight, cameraObj, landScapeMode);
                 preview.addView(drawView);
 
@@ -552,23 +498,20 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 }
 
                 if(info){
-                    // Show data
-                    setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
-                            horizontalGaze, verticalGaze);
+                    setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue, horizontalGaze, verticalGaze);
                 }
 
                 // Send notification to the driver if there is a symptom
                 // if ( ... )
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+                /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
                 mBuilder.setSmallIcon(R.drawable.ic_launcher);
                 mBuilder.setContentTitle("Custom title");
                 mBuilder.setContentText("Custom text");
                 // Customize notification
                 int mNotificationId = 1;
                 NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
             }
         }
     }
-
 }
