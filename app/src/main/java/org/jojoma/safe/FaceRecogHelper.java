@@ -9,8 +9,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class FaceRecogHelper {
 
     private static final int LATEST_MEASURES_SIZE = 50;
-    private static final int IS_EYE_BLINK = 5;
-    private static final int EYE_BLINK_THRESHOLD = 65;
+    private static final int EYE_BLINK_THRESHOLD = 5;
+    private static final int IS_EYE_BLINK = 65;
 
     /**
      *  Calibrated parameters are the references
