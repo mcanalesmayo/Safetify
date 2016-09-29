@@ -113,7 +113,14 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         final String PREFS_NAME = "Preferencias";
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        //TODO: PARA CAMBIAR ENTRE PRIMER PLANO O SEGUNDO PLANO
+        //Primer Plano
         setContentView(R.layout.activity_camera_preview);
+        //Segundo Plano
+        //setContentView(R.layout.activity_camera_preview_background);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
 
         if (settings.getBoolean("firstTime", true)) {
             // The app is being launched for first time, do something
