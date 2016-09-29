@@ -1,11 +1,3 @@
-/*
- * ======================================================================
- * Copyright 2014 Qualcomm Technologies, Inc. All Rights Reserved.
- * QTI Proprietary and Confidential.
- * =====================================================================
- * @file: CameraPreviewActivity.java
- */
-
 package org.jojoma.safe;
 
 import java.util.EnumSet;
@@ -14,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -103,6 +96,19 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String PREFS_NAME = "Preferencias";
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("firstTime", true)) {
+           // The app is being launched for first time, do something
+           Log.d("Comments", "First time");
+
+           // first time task
+
+           // record the fact that the app has been started at least once
+           settings.edit().putBoolean("firstTime", false).commit();
+        }
         setContentView(R.layout.activity_camera_preview);
         myView = new View(CameraPreviewActivity.this);
         // Create our Preview view and set it as the content of our activity.
@@ -118,17 +124,18 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         horizontalGazeText = (TextView) findViewById(R.id.horizontalGazeAngle);
         verticalGazeText = (TextView) findViewById(R.id.verticalGazeAngle);
 
-           handler = new Handler();
-           periodicTask = new Runnable(){
+        handler = new Handler();
+        periodicTask = new Runnable(){
 
-               @Override
-               public void run(){
-                   // Capture and detect
+           @Override
+           public void run(){
+               // Capture and detect
 
-                   // Delay N millis
-                   handler.postDelayed(periodicTask, TASK_PERIOD);
-               }
-           };
+               // Delay N millis
+               handler.postDelayed(periodicTask, TASK_PERIOD);
+           }
+        };
+
         // Check to see if the FacialProc feature is supported in the device or no.
         fpFeatureSupported = FacialProcessing
                 .isFeatureSupported(FacialProcessing.FEATURE_LIST.FEATURE_FACIAL_PROCESSING);
@@ -167,7 +174,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
         // Start the periodic task
-        //handler.post(periodicTask);
+        // handler.post(periodicTask);
     }
 
     FaceDetectionListener faceDetectionListener = new FaceDetectionListener() {

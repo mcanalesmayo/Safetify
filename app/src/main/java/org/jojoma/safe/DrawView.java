@@ -1,11 +1,3 @@
-/*
- * ======================================================================
- * Copyright  2014 Qualcomm Technologies, Inc. All Rights Reserved.
- * QTI Proprietary and Confidential.
- * =====================================================================
- * @file: DrawView.java
- */
-
 package org.jojoma.safe;
 
 import android.content.Context;
