@@ -1,11 +1,3 @@
-/*
- * ======================================================================
- * Copyright  2014 Qualcomm Technologies, Inc. All Rights Reserved.
- * QTI Proprietary and Confidential.
- * =====================================================================
- * @file: CameraSurfacePreview.java
- */
-
 package org.jojoma.safe;
 
 import java.io.IOException;
