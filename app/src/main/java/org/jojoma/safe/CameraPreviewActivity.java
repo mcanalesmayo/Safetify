@@ -75,7 +75,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
     // TextView Variables
     TextView numFaceText, smileValueText, leftBlinkText, rightBlinkText, gazePointText, faceRollText, faceYawText,
-    facePitchText, horizontalGazeText, verticalGazeText;
+    facePitchText, horizontalGazeText, verticalGazeText, gazePoint;
 
     // Progress bar
     RoundCornerProgressBar progressBar;
@@ -123,6 +123,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         horizontalGazeText = (TextView) findViewById(R.id.horizontalGazeAngle);
         verticalGazeText = (TextView) findViewById(R.id.verticalGazeAngle);
         progressBar = (RoundCornerProgressBar) findViewById(R.id.progressBar);
+        gazePoint = (TextView) findViewById(R.id.gazePoint);
 
         handler = new Handler();
         periodicTask = new Runnable(){
@@ -238,6 +239,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     facePitchText.setVisibility(View.VISIBLE);
                     horizontalGazeText.setVisibility(View.VISIBLE);
                     verticalGazeText.setVisibility(View.VISIBLE);
+                    gazePoint.setVisibility(View.VISIBLE);
                 }
                 else{
                     numFaceText.setVisibility(View.INVISIBLE);
@@ -249,6 +251,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     facePitchText.setVisibility(View.INVISIBLE);
                     horizontalGazeText.setVisibility(View.INVISIBLE);
                     verticalGazeText.setVisibility(View.INVISIBLE);
+                    gazePoint.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -392,13 +395,13 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         switch (dRotation) {
         case 0:
-            displayAngle = 90;
-            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_90;
+            displayAngle = 270;
+            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_270;
             break;
 
         case 1:
-            displayAngle = 0;
-            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_0;
+            displayAngle = 180;
+            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_180;
             break;
 
         case 2:
@@ -406,8 +409,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             break;
 
         case 3:
-            displayAngle = 180;
-            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_180;
+            displayAngle = 0;
+            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_0;
             break;
         }
 
