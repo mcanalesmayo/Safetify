@@ -10,6 +10,7 @@ The application detects previous symptoms of somnolence, fatigue, distractions, 
 
 ## Requirements
 Android version >= 4.1.x
+Qualcomm Snapdragon processor
 
 ## Installation
 The application is not currently available in the Play Store. Downloading the .apk file and installing it should be fine.
