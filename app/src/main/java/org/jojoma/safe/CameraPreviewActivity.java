@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ import com.qualcomm.snapdragon.sdk.face.FaceData;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing.FP_MODES;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing.PREVIEW_ROTATION_ANGLE;
+
+import pl.droidsonroids.gif.GifImageView;
 
 @SuppressLint("NewApi")
 public class CameraPreviewActivity extends Activity implements Camera.PreviewCallback {
@@ -90,6 +93,9 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     Display display;
     int displayAngle;
 
+    private static final int TIMES_TO_CALIBRATE = 50;
+    boolean calibrating = true;
+    int calibratedTimes = 0;
     Handler handler;
     Runnable periodicTask;
     static final long TASK_PERIOD = 200;
@@ -100,15 +106,21 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         final String PREFS_NAME = "Preferencias";
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        setContentView(R.layout.activity_camera_preview);
 
         if (settings.getBoolean("firstTime", true)) {
-           // The app is being launched for first time, do something
-           // first time task
+            // The app is being launched for first time, do something
+            // first time task
+            ProgressBar mProgress;
+            mProgress = (ProgressBar) findViewById(R.id.calibrating_circle);
+            TextView loading = (TextView) findViewById(R.id.calibrating_text);
+            loading.setVisibility(View.VISIBLE);
+            mProgress.setVisibility(View.VISIBLE);
 
-           // record the fact that the app has been started at least once
-           settings.edit().putBoolean("firstTime", false).commit();
+            // record the fact that the app has been started at least once
+            settings.edit().putBoolean("firstTime", false).commit();
         }
-        setContentView(R.layout.activity_camera_preview);
+
         myView = new View(CameraPreviewActivity.this);
         // Create our Preview view and set it as the content of our activity.
         preview = (FrameLayout) findViewById(R.id.camera_preview);
@@ -125,12 +137,14 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         progressBar = (RoundCornerProgressBar) findViewById(R.id.progressBar);
         gazePoint = (TextView) findViewById(R.id.gazePoint);
 
+
         handler = new Handler();
         periodicTask = new Runnable(){
 
            @Override
            public void run(){
                // Capture and detect
+
 
                // Delay N millis
                handler.postDelayed(periodicTask, TASK_PERIOD);
@@ -461,6 +475,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             }
             canvas.drawColor(0, Mode.CLEAR);
             setUI(0, 0, 0, 0, 0, 0, 0, null, 0, 0);
+            calibratedTimes = 0;
         } else {
             Log.d("TAG", "Face Detected");
             faceArray = faceProc.getFaceData(EnumSet.of(FacialProcessing.FP_DATA.FACE_RECT,
@@ -500,6 +515,20 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     // Datos en pantalla
                     setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue,
                             horizontalGaze, verticalGaze);
+                }
+
+                calibratedTimes+=1;
+
+                FaceRecogHelper.addLeftEyeMeasure(leftEyeBlink);
+                FaceRecogHelper.addRightEyeMeasure(rightEyeBlink);
+                FaceRecogHelper.addHeadIncMeasure(leftEyeBlink);
+
+                if (calibratedTimes == TIMES_TO_CALIBRATE){
+                    // Ya hemos conseguido todas las muestras para el calibrado
+                    calibrating = false;
+                }
+                else{
+                    // Ya hemos hecho el calibrado previamente
                 }
 
                 // Send notification to the driver if there is a symptom
