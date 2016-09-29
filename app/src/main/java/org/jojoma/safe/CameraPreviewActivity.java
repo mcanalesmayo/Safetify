@@ -24,19 +24,17 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.qualcomm.snapdragon.sdk.face.FaceData;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing;
 import com.qualcomm.snapdragon.sdk.face.FacialProcessing.FP_MODES;
@@ -77,7 +75,10 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
     // TextView Variables
     TextView numFaceText, smileValueText, leftBlinkText, rightBlinkText, gazePointText, faceRollText, faceYawText,
-    facePitchText, horizontalGazeText, verticalGazeText;
+    facePitchText, horizontalGazeText, verticalGazeText, gazePoint;
+
+    // Progress bar
+    RoundCornerProgressBar progressBar;
 
     int surfaceWidth = 0;
     int surfaceHeight = 0;
@@ -102,8 +103,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         if (settings.getBoolean("firstTime", true)) {
            // The app is being launched for first time, do something
-           Log.d("Comments", "First time");
-
            // first time task
 
            // record the fact that the app has been started at least once
@@ -123,6 +122,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         facePitchText = (TextView) findViewById(R.id.facePitchValue);
         horizontalGazeText = (TextView) findViewById(R.id.horizontalGazeAngle);
         verticalGazeText = (TextView) findViewById(R.id.verticalGazeAngle);
+        progressBar = (RoundCornerProgressBar) findViewById(R.id.progressBar);
+        gazePoint = (TextView) findViewById(R.id.gazePoint);
 
         handler = new Handler();
         periodicTask = new Runnable(){
@@ -216,6 +217,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         recalibrateButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                progressBar.setProgress((float) 90.0);
+                //progressBar.setProgressColor(getResources().getColor(R.color.round_corner_progress_bar_secondary_progress_default));
                 Toast.makeText(CameraPreviewActivity.this, "Boton Recalibrate pulsado", Toast.LENGTH_SHORT).show();
             }
 
@@ -236,6 +239,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     facePitchText.setVisibility(View.VISIBLE);
                     horizontalGazeText.setVisibility(View.VISIBLE);
                     verticalGazeText.setVisibility(View.VISIBLE);
+                    gazePoint.setVisibility(View.VISIBLE);
                 }
                 else{
                     numFaceText.setVisibility(View.INVISIBLE);
@@ -247,6 +251,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                     facePitchText.setVisibility(View.INVISIBLE);
                     horizontalGazeText.setVisibility(View.INVISIBLE);
                     verticalGazeText.setVisibility(View.INVISIBLE);
+                    gazePoint.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -390,13 +395,13 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         switch (dRotation) {
         case 0:
-            displayAngle = 90;
-            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_90;
+            displayAngle = 270;
+            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_270;
             break;
 
         case 1:
-            displayAngle = 0;
-            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_0;
+            displayAngle = 180;
+            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_180;
             break;
 
         case 2:
@@ -404,8 +409,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             break;
 
         case 3:
-            displayAngle = 180;
-            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_180;
+            displayAngle = 0;
+            angleEnum = PREVIEW_ROTATION_ANGLE.ROT_0;
             break;
         }
 

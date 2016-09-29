@@ -17,14 +17,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'armeabi-v7a'
-            universalApk true
-        }
-    }
 }
 
 dependencies {
@@ -33,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:design:24.2.0'
     compile 'com.akexorcist:RoundCornerProgressBar:2.0.3'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
 }
