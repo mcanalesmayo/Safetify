@@ -131,7 +131,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="50dp"
 		android:layout_alignParentBottom="true"
-		app:rcProgress="50"
 		app:rcProgressColor="@color/round_corner_progress_bar_progress_default"
 		app:rcSecondaryProgress="100"
 		app:rcSecondaryProgressColor="@color/round_corner_progress_bar_secondary_progress_default"
@@ -139,18 +138,6 @@
 		app:rcBackgroundPadding="5dp"
 		app:rcReverse="false"
 		app:rcMax="100"
-		app:rcRadius="5dp" />
-
-	<com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar
-		android:id="@+id/progressBarIcon"
-		android:layout_width="wrap_content"
-		android:layout_height="50dp"
-		android:layout_alignParentBottom="true"
-		android:layout_alignLeft="@+id/progressBar"
-		app:rcBackgroundPadding="5dp"
-		app:rcIconSize="50dp"
-		app:rcIconPadding="2dp"
-		app:rcIconSrc="@drawable/ic_launcher"
 		app:rcRadius="5dp" />
 
 	<LinearLayout
