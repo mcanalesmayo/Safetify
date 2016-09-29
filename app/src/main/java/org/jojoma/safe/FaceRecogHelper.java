@@ -11,7 +11,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class FaceRecogHelper {
 
-    private static final int LATEST_MEASURES_SIZE = 50;
+    private static final int LATEST_MEASURES_SIZE = 5;
     private static final int EYE_BLINK_THRESHOLD = 4;
     private static final int GENERIC_EYE_ALERT_VALUE = 65;
     private static final int GENERIC_EYE_VALUE = 30;
@@ -252,7 +252,7 @@ public class FaceRecogHelper {
         latestVals[0] = vals[LATEST_MEASURES_SIZE - 4];
         double yawMedian = median(latestVals);
 
-        res.add(1, (leftEyeMedian + rightEyeMedian + leftBlink * 16.25 + rightBlink * 16.25) / 4);
+        res.add(1, (leftEyeMedian + rightEyeMedian + leftBlink * 16.25 + rightBlink * 16.25) / 1.5);
 
         return res;
     }
