@@ -165,4 +165,35 @@
 
 	</LinearLayout>
 
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:layout_alignParentTop="true"
+		android:layout_alignTop="@+id/progressBar">
+
+		<pl.droidsonroids.gif.GifImageView
+			android:id="@+id/calibrateImg"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:src="@drawable/loading"
+			android:background="@drawable/loading"
+			/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:labelFor="@+id/btn_toggle"
+			android:text="Calibrando..."/>
+
+	</LinearLayout>
+
+
+
+
+
+
+
 </RelativeLayout>
