@@ -124,10 +124,10 @@
 		app:rcSecondaryProgress="100"
 		app:rcSecondaryProgressColor="@color/round_corner_progress_bar_secondary_progress_default"
 		app:rcBackgroundColor="@color/round_corner_progress_bar_background_default"
-		app:rcBackgroundPadding="5dp"
+		app:rcBackgroundPadding="0dp"
 		app:rcReverse="false"
 		app:rcMax="100"
-		app:rcRadius="5dp" />
+		app:rcRadius="20dp" />
 
 	<LinearLayout
 		android:layout_width="wrap_content"
@@ -162,8 +162,7 @@
 		android:orientation="vertical"
 		android:gravity="center"
 		android:layout_gravity="center"
-		android:layout_alignParentTop="true"
-		android:layout_alignTop="@+id/progressBar">
+		android:layout_above="@+id/progressBar">
 
 		<ProgressBar
 			android:id="@+id/calibrating_circle"
@@ -178,7 +177,8 @@
 			android:layout_height="wrap_content"
 			android:labelFor="@+id/calibrating_circle"
 			android:visibility="invisible"
-			android:text="@string/calibrating"/>
+			android:text="@string/calibrating"
+			android:textColor="@color/white" />
 
 	</LinearLayout>
 

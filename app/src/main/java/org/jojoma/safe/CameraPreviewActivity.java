@@ -103,6 +103,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     final static int COLOR_100 = Color.parseColor("#e52727");
 
     MediaPlayer mp;
+    ProgressBar mProgress;
+    TextView loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,17 +121,14 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         //setContentView(R.layout.activity_camera_preview_background);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-
+        mProgress = (ProgressBar) findViewById(R.id.calibrating_circle);
+        loading = (TextView) findViewById(R.id.calibrating_text);
 
         if (settings.getBoolean("firstTime", true)) {
             // The app is being launched for first time, do something
             // first time task
-            ProgressBar mProgress;
-            mProgress = (ProgressBar) findViewById(R.id.calibrating_circle);
-            TextView loading = (TextView) findViewById(R.id.calibrating_text);
             loading.setVisibility(View.VISIBLE);
             mProgress.setVisibility(View.VISIBLE);
-
             // record the fact that the app has been started at least once
             settings.edit().putBoolean("firstTime", false).commit();
         }
@@ -169,6 +168,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                Log.d(TAG, "calibrating: " + calibrating);
                // Check if frame is used to calibrate
                if (calibrating){
+                   loading.setVisibility(View.VISIBLE);
+                   mProgress.setVisibility(View.VISIBLE);
                    calibratedTimes+=1;
                    Log.d(TAG, "calibratedTimes: " + calibratedTimes);
                    if (calibratedTimes == TIMES_TO_CALIBRATE){
@@ -178,6 +179,8 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                    }
                }
                else{
+                   loading.setVisibility(View.INVISIBLE);
+                   mProgress.setVisibility(View.INVISIBLE);
                    // Check whether an alert should be popped up
                    List<Object> alertInfo = FaceRecogHelper.getAlertLevel();
                    changeProgress(progressBar, ((Double) alertInfo.get(1)).intValue());
@@ -188,7 +191,6 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                            Log.d(TAG, "starting sound");
                            mp.start();
                        }
-                       alertIcon.setVisibility(View.VISIBLE);
                    }
                    else{
                        // Stop alert
@@ -470,7 +472,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             canvas.drawColor(0, Mode.CLEAR);
             setUI(0, 0, 0, 0, 0, 0, 0, null, 0, 0);
             calibratedTimes = 0;
-        } else {
+        } else if ( numFaces == 1){
             Log.d("TAG", "Face Detected");
             faceArray = faceProc.getFaceData(EnumSet.of(FacialProcessing.FP_DATA.FACE_RECT,
                     FacialProcessing.FP_DATA.FACE_COORDINATES, FacialProcessing.FP_DATA.FACE_CONTOUR,
@@ -517,6 +519,9 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
             }
+        }
+        else{
+
         }
     }
 
