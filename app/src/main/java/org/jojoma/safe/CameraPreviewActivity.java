@@ -15,8 +15,6 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.PorterDuff.Mode;
 import android.hardware.Camera;
-import android.hardware.Camera.Face;
-import android.hardware.Camera.FaceDetectionListener;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.hardware.SensorManager;

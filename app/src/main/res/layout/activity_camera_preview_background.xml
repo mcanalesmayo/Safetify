@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-/* ======================================================================
-*  Copyright (c) 2014 Qualcomm Technologies, Inc. All Rights Reserved.
-*  QTI Proprietary and Confidential.
-*  =====================================================================
-*
-* @file    activity_camera_preview.xml
-* @brief   Android application manifest file for DeviceInfo API.
-*/-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -200,10 +191,5 @@
 		android:src="@drawable/alert_icon"
 		android:layout_centerInParent="true"
 		android:visibility="invisible"/>
-
-
-
-
-
 
 </RelativeLayout>

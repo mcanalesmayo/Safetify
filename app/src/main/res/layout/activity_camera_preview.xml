@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-/* ======================================================================
-*  Copyright (c) 2014 Qualcomm Technologies, Inc. All Rights Reserved.
-*  QTI Proprietary and Confidential.
-*  =====================================================================
-*
-* @file    activity_camera_preview.xml
-* @brief   Android application manifest file for DeviceInfo API.
-*/-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000000"
+    android:background="@color/black"
     tools:context="org.jojoma.safe.CameraPreviewActivity" >
 
     <FrameLayout
@@ -22,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-		android:layout_above="@+id/progressBar"
-		/>
+		android:layout_above="@+id/progressBar" />
 
 	<TextView
 		android:id="@+id/numFaces"
@@ -31,9 +21,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/progressBar"
-		android:text="Number of Faces: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/number_of_faces"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/smileValue"
@@ -41,9 +31,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/progressBar"
-		android:text="Smile Value: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/smile_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/gazePoint"
@@ -51,9 +41,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/numFaces"
-		android:text="Gaze Point Value: ( , ) "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/gaze_point_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/faceRoll"
@@ -61,9 +51,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/smileValue"
-		android:text="Face Roll Value: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/face_roll_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/leftEyeBlink"
@@ -71,9 +61,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/gazePoint"
-		android:text="Left Eye Blink Value: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/left_eye_blink_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/rightEyeBlink"
@@ -81,9 +71,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/gazePoint"
-		android:text="Right Eye Blink Value: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/right_eye_blink_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/faceYawValue"
@@ -91,9 +81,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/leftEyeBlink"
-		android:text="Face Yaw Value: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/face_yaw_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/facePitchValue"
@@ -101,10 +91,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/rightEyeBlink"
-		android:text="Face Pitch Value: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
-
+		android:text="@string/face_pitch_value"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/horizontalGazeAngle"
@@ -112,9 +101,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignLeft="@+id/progressBar"
 		android:layout_above="@+id/faceYawValue"
-		android:text="Horizontal Gaze: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/horizontal_gaze"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<TextView
 		android:id="@+id/verticalGazeAngle"
@@ -122,9 +111,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignRight="@+id/progressBar"
 		android:layout_above="@+id/facePitchValue"
-		android:text="Vertical Gaze: "
-		android:textColor="#FFFFFF"
-		android:background="#80000000"/>
+		android:text="@string/vertical_gaze"
+		android:textColor="@color/white"
+		android:background="@color/black"/>
 
 	<com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
 		android:id="@+id/progressBar"
@@ -152,11 +141,13 @@
 			android:layout_width="50dp"
 			android:layout_height="50dp"
 			android:src="@drawable/opensettings" />
+
 		<ImageView
 			android:id="@+id/openRecalibrateButton"
 			android:layout_width="50dp"
 			android:layout_height="50dp"
 			android:src="@drawable/calibratesettings" />
+
 		<ImageView
 			android:id="@+id/openViewDataButton"
 			android:layout_width="50dp"
@@ -187,8 +178,7 @@
 			android:layout_height="wrap_content"
 			android:labelFor="@+id/calibrating_circle"
 			android:visibility="invisible"
-			android:text="Calibrando..."/>
-
+			android:text="@string/calibrating"/>
 
 	</LinearLayout>
 
@@ -199,10 +189,4 @@
 		android:src="@drawable/alert_icon"
 		android:layout_centerInParent="true"
 		android:visibility="invisible"/>
-
-
-
-
-
-
 </RelativeLayout>
