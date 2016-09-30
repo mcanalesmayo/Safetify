@@ -191,6 +191,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                            Log.d(TAG, "starting sound");
                            mp.start();
                        }
+                       alertIcon.setVisibility(View.VISIBLE);
                    }
                    else{
                        // Stop alert
@@ -271,11 +272,12 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         openSettingsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent mIntent = new Intent(arg0.getContext(), BackgroundService.class);     //Lanzamos servicio en segundo plano
+                //TODO: NO FUNCIONA AÚN
+                //Intent mIntent = new Intent(arg0.getContext(), BackgroundService.class);     //Lanzamos servicio en segundo plano
                 //TODO: Aqui se pasan los valores al service
-                mIntent.putExtra("KEY", "VALOR");
-                startService(mIntent);
-                finish();
+                //mIntent.putExtra("KEY", "VALOR");
+                //startService(mIntent);
+                //finish();
             }
         });
         ImageView recalibrateButton = (ImageView) findViewById(R.id.openRecalibrateButton);
