@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -511,5 +512,16 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        // exit activity
+        if ((keyCode == KeyEvent.KEYCODE_BACK)){
+            handler.removeCallbacks(periodicTask);
+            stopCamera();
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
