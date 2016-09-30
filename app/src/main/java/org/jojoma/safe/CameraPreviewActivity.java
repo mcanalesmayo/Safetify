@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -118,6 +119,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         //Segundo Plano
         //setContentView(R.layout.activity_camera_preview_background);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
 
 
         if (settings.getBoolean("firstTime", true)) {
@@ -268,7 +270,11 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         openSettingsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                changeProgress(progressBar, 10);
+                Intent mIntent = new Intent(arg0.getContext(), BackgroundService.class);     //Lanzamos servicio en segundo plano
+                //TODO: Aqui se pasan los valores al service
+                mIntent.putExtra("KEY", "VALOR");
+                startService(mIntent);
+                finish();
             }
         });
         ImageView recalibrateButton = (ImageView) findViewById(R.id.openRecalibrateButton);
