@@ -25,10 +25,6 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by cokelas on 30/9/16.
- */
-
 public class BackgroundService extends Service{
     private NotificationManager mNM;
 
@@ -78,7 +74,7 @@ public class BackgroundService extends Service{
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        // Display a notification about us starting.  We put an icon in the status bar.
+        // Display a notification about us starting. Puts an icon in the status bar.
         showNotification();
 
         mp = MediaPlayer.create(this,R.raw.alarm);
@@ -173,14 +169,12 @@ public class BackgroundService extends Service{
 
         // Start the periodic task
         handler.post(periodicTask);
-
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        //TODO: aqui se reciben los datos de la actividad
+        //TODO: receiving data from activity
         Log.e("TAG", "Received start id " + startId + ": " + intent);
         String value = intent.getExtras().getString("KEY");
         String value2 = intent.getStringExtra("KEY");
@@ -195,25 +189,22 @@ public class BackgroundService extends Service{
         // Cancel the persistent notification.
         mNM.cancel(NOTIFICATION);
 
-        // Tell the user we stopped.
+        // Tell the user that it has been stopped.
         Toast.makeText(this, "LOCAL SERVIDCE STOPPED", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-
         return mBinder;
     }
 
-    // This is the object that receives interactions from clients.  See
-    // RemoteService for a more complete example.
+    // This is the object that receives interactions from clients. See RemoteService for a more complete example.
     private final IBinder mBinder = new LocalBinder();
 
     /**
      * Show a notification while this service is running.
      */
     private void showNotification() {
-        // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = "Servicio en segundo plano activo";
 
         // The PendingIntent to launch our activity if the user selects this notification

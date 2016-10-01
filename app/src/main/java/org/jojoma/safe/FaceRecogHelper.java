@@ -87,10 +87,7 @@ public class FaceRecogHelper {
      * @param measure measured parameter
      */
     public static void addLeftEyeMeasure(Integer measure){
-        if (latestLeftEyeMeasures.size() == LATEST_MEASURES_SIZE){
-            latestLeftEyeMeasures.remove();
-        }
-        latestLeftEyeMeasures.add(measure);
+        addMeasure(latestLeftEyeMeasures, measure);
     }
 
     /**
@@ -98,10 +95,7 @@ public class FaceRecogHelper {
      * @param measure measured parameter
      */
     public static void addRightEyeMeasure(Integer measure){
-        if (latestRightEyeMeasures.size() == LATEST_MEASURES_SIZE){
-            latestRightEyeMeasures.remove();
-        }
-        latestRightEyeMeasures.add(measure);
+        addMeasure(latestRightEyeMeasures, measure);
     }
 
     /**
@@ -109,10 +103,7 @@ public class FaceRecogHelper {
      * @param measure measured parameter
      */
     public static void addRollMeasure(Integer measure){
-        if (latestRollMeasures.size() == LATEST_MEASURES_SIZE){
-            latestRollMeasures.remove();
-        }
-        latestRollMeasures.add(measure);
+        addMeasure(latestRollMeasures, measure);
     }
 
     /**
@@ -120,10 +111,7 @@ public class FaceRecogHelper {
      * @param measure measured parameter
      */
     public static void addPitchMeasure(Integer measure){
-        if (latestPitchMeasures.size() == LATEST_MEASURES_SIZE){
-            latestPitchMeasures.remove();
-        }
-        latestPitchMeasures.add(measure);
+        addMeasure(latestPitchMeasures, measure);
     }
 
 
@@ -132,10 +120,14 @@ public class FaceRecogHelper {
      * @param measure measured parameter
      */
     public static void addYawMeasure(Integer measure){
-        if (latestYawMeasures.size() == LATEST_MEASURES_SIZE){
-            latestYawMeasures.remove();
+        addMeasure(latestYawMeasures, measure);
+    }
+
+    private static void addMeasure(Queue<Integer> q, Integer measure){
+        if (q.size() == LATEST_MEASURES_SIZE){
+            q.remove();
         }
-        latestYawMeasures.add(measure);
+        q.add(measure);
     }
 
     /**
@@ -222,45 +214,44 @@ public class FaceRecogHelper {
         latestVals[2] = vals[LATEST_MEASURES_SIZE - 2];
         latestVals[1] = vals[LATEST_MEASURES_SIZE - 3];
         latestVals[0] = vals[LATEST_MEASURES_SIZE - 4];
-        double leftEyeMedian = median(latestVals);
+        double leftEyeMedian = getMedian(latestVals);
 
         vals = latestRightEyeMeasures.toArray(new Integer[LATEST_MEASURES_SIZE]);
         latestVals[3] = vals[LATEST_MEASURES_SIZE - 1];
         latestVals[2] = vals[LATEST_MEASURES_SIZE - 2];
         latestVals[1] = vals[LATEST_MEASURES_SIZE - 3];
         latestVals[0] = vals[LATEST_MEASURES_SIZE - 4];
-        double rightEyeMedian = median(latestVals);
+        double rightEyeMedian = getMedian(latestVals);
 
         vals = latestRollMeasures.toArray(new Integer[LATEST_MEASURES_SIZE]);
         latestVals[3] = vals[LATEST_MEASURES_SIZE - 1];
         latestVals[2] = vals[LATEST_MEASURES_SIZE - 2];
         latestVals[1] = vals[LATEST_MEASURES_SIZE - 3];
         latestVals[0] = vals[LATEST_MEASURES_SIZE - 4];
-        double rollMedian = median(latestVals);
+        double rollMedian = getMedian(latestVals);
 
         vals = latestPitchMeasures.toArray(new Integer[LATEST_MEASURES_SIZE]);
         latestVals[3] = vals[LATEST_MEASURES_SIZE - 1];
         latestVals[2] = vals[LATEST_MEASURES_SIZE - 2];
         latestVals[1] = vals[LATEST_MEASURES_SIZE - 3];
         latestVals[0] = vals[LATEST_MEASURES_SIZE - 4];
-        double pitchMedian = median(latestVals);
+        double pitchMedian = getMedian(latestVals);
 
         vals = latestYawMeasures.toArray(new Integer[LATEST_MEASURES_SIZE]);
         latestVals[3] = vals[LATEST_MEASURES_SIZE - 1];
         latestVals[2] = vals[LATEST_MEASURES_SIZE - 2];
         latestVals[1] = vals[LATEST_MEASURES_SIZE - 3];
         latestVals[0] = vals[LATEST_MEASURES_SIZE - 4];
-        double yawMedian = median(latestVals);
+        double yawMedian = getMedian(latestVals);
 
         res.add(1, (leftEyeMedian + rightEyeMedian + leftBlink * 16.25 + rightBlink * 16.25) / 1.5);
 
         return res;
     }
 
-    public static double median(Integer[] arr) {
+    public static double getMedian(Integer[] arr) {
         Arrays.sort(arr);
 
-        // Calculate median (middle number)
         double median = 0;
         double pos1 = Math.floor((arr.length - 1.0) / 2.0);
         double pos2 = Math.ceil((arr.length - 1.0) / 2.0);
