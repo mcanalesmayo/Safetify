@@ -15,7 +15,7 @@ The application uses facial recognition to detect previous symptoms of somnolenc
 We are working to reach more devices.
 
 ## Installation
-The application is not currently available in the Play Store. Downloading the [.apk](https://github.com/MarcosCM/Safetify/raw/master/Safetify.apk) file and installing it should be fine.
+The application is not currently available in the Play Store. Download and istall the [.apk](https://github.com/MarcosCM/Safetify/raw/master/Safetify.apk) file and set the system permissions manually.
 
 ## Instructions
 Steps:
