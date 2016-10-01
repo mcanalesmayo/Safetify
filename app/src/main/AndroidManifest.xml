@@ -18,11 +18,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-        >
-        <!-- PARA OPCION EN SEGUNDO PLANO CAMBIAR ESTO
+        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+        <!-- To set on background replace:
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            POR ESTO
+            by:
             android:theme="@style/Theme.Transparent"
         -->
         <activity

@@ -6,9 +6,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -22,7 +20,6 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -59,7 +56,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
     boolean info = true;
     boolean landScapeMode = false;
 
-    int cameraIndex;// Integer to keep track of which camera is open.
+    int cameraIndex;
     int smileValue = 0;
     int leftEyeBlink = 0;
     int rightEyeBlink = 0;
@@ -114,10 +111,10 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //TODO: PARA CAMBIAR ENTRE PRIMER PLANO O SEGUNDO PLANO
-        //Primer Plano
+        // TODO: Foreground vs Background
+        // Foreground
         setContentView(R.layout.activity_camera_preview);
-        //Segundo Plano
+        // Background
         //setContentView(R.layout.activity_camera_preview_background);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -134,7 +131,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         }
 
         myView = new View(CameraPreviewActivity.this);
-        // Create our Preview view and set it as the content of our activity.
+        // Create our Preview view and set it as the content of our activity
         preview = (FrameLayout) findViewById(R.id.camera_preview);
         numFaceText = (TextView) findViewById(R.id.numFaces);
         smileValueText = (TextView) findViewById(R.id.smileValue);
@@ -217,21 +214,22 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
 
         if (fpFeatureSupported && faceProc == null) {
             Log.e("TAG", "Feature is supported");
-            faceProc = FacialProcessing.getInstance();  // Calling the Facial Processing Constructor.
+            faceProc = FacialProcessing.getInstance();
             faceProc.setProcessingMode(FP_MODES.FP_MODE_VIDEO);
         } else {
             Log.e("TAG", "Feature is NOT supported");
             return;
         }
 
-        cameraIndex = FRONT_CAMERA_INDEX;// Start with front Camera
+        cameraIndex = FRONT_CAMERA_INDEX;
 
         try {
-            cameraObj = Camera.open(cameraIndex); // attempt to get a Camera instance
+            cameraObj = Camera.open(cameraIndex);
             //CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
            // String[] cams = manager.getCameraIdList();
         } catch (Exception e) {
-            Log.d("TAG", "Camera Does Not exist");// Camera is not available (in use or does not exist)
+            // Camera is not available (in use or does not exist)
+            Log.e("TAG", "Camera Does Not exist");
         }
 
         // Change the sizes according to phone's compatibility.
@@ -241,9 +239,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         preview.addView(mPreview);
         cameraObj.setPreviewCallback(CameraPreviewActivity.this);
 
-        // Action listener for the Switch Camera Button.
-        ButtonsListeners();
-
+        buttonsListeners();
         orientationListener();
 
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -267,14 +263,14 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         presentOrientation = 90 * (deviceOrientation / 360) % 360;
     }
 
-    private void ButtonsListeners() {
+    private void buttonsListeners() {
         ImageView openSettingsButton = (ImageView) findViewById(R.id.openSettingsButton);
         openSettingsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //TODO: NO FUNCIONA AÚN
+                // TODO: Does not work yet
                 //Intent mIntent = new Intent(arg0.getContext(), BackgroundService.class);     //Lanzamos servicio en segundo plano
-                //TODO: Aqui se pasan los valores al service
+                // Communicating with the service
                 //mIntent.putExtra("KEY", "VALOR");
                 //startService(mIntent);
                 //finish();
@@ -294,33 +290,19 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             @Override
             public void onClick(View arg0) {
                 info = !info;
-                if(info){
-                    setUIData(View.VISIBLE);
-                }
-                else{
-                    setUIData(View.INVISIBLE);
-                }
+                if(info) setUIData(View.VISIBLE);
+                else setUIData(View.INVISIBLE);
             }
         });
     }
 
     private void changeProgress (RoundCornerProgressBar pg, int percentage){
         pg.setProgress( (float) percentage);
-        if (percentage <= 20){
-            pg.setProgressColor(COLOR_20);
-        }
-        else if (percentage <= 40){
-            pg.setProgressColor(COLOR_40);
-        }
-        else if (percentage <= 60){
-            pg.setProgressColor(COLOR_60);
-        }
-        else if (percentage <= 80){
-            pg.setProgressColor(COLOR_80);
-        }
-        else{
-            pg.setProgressColor(COLOR_100);
-        }
+        if (percentage <= 20) pg.setProgressColor(COLOR_20);
+        else if (percentage <= 40) pg.setProgressColor(COLOR_40);
+        else if (percentage <= 60) pg.setProgressColor(COLOR_60);
+        else if (percentage <= 80) pg.setProgressColor(COLOR_80);
+        else pg.setProgressColor(COLOR_100);
     }
 
     private void setUIData(int type){
@@ -349,7 +331,7 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
         verticalGazeText.setText("VerticalGaze: " + verticalGazeAngle);
 
         if (gazePointValue != null) {
-            double x = Math.round(gazePointValue.x * 100.0) / 100.0;// Rounding the gaze point value.
+            double x = Math.round(gazePointValue.x * 100.0) / 100.0;
             double y = Math.round(gazePointValue.y * 100.0) / 100.0;
             gazePointText.setText("Gaze Point: (" + x + "," + y + ")");
         } else {
@@ -474,12 +456,13 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
             canvas.drawColor(0, Mode.CLEAR);
             setUI(0, 0, 0, 0, 0, 0, 0, null, 0, 0);
             calibratedTimes = 0;
-        } else if ( numFaces == 1){
+        } else {
             Log.d("TAG", "Face Detected");
             faceArray = faceProc.getFaceData(EnumSet.of(FacialProcessing.FP_DATA.FACE_RECT,
                     FacialProcessing.FP_DATA.FACE_COORDINATES, FacialProcessing.FP_DATA.FACE_CONTOUR,
                     FacialProcessing.FP_DATA.FACE_SMILE, FacialProcessing.FP_DATA.FACE_ORIENTATION,
                     FacialProcessing.FP_DATA.FACE_BLINK, FacialProcessing.FP_DATA.FACE_GAZE));
+            // if numFaces > 1 then choose the closest one => index 0
             if (faceArray == null) {
                 Log.e("TAG", "Face array is null");
             } else {
@@ -494,24 +477,19 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 drawView = new DrawView(this, faceArray, true, surfaceWidth, surfaceHeight, cameraObj, landScapeMode);
                 preview.addView(drawView);
 
-                for (int j = 0; j < numFaces; j++) {
-                    smileValue = faceArray[j].getSmileValue();
-                    leftEyeBlink = faceArray[j].getLeftEyeBlink();
-                    rightEyeBlink = faceArray[j].getRightEyeBlink();
-                    faceRollValue = faceArray[j].getRoll();
-                    gazePointValue = faceArray[j].getEyeGazePoint();
-                    pitch = faceArray[j].getPitch();
-                    yaw = faceArray[j].getYaw();
-                    horizontalGaze = faceArray[j].getEyeHorizontalGazeAngle();
-                    verticalGaze = faceArray[j].getEyeVerticalGazeAngle();
-                }
+                smileValue = faceArray[0].getSmileValue();
+                leftEyeBlink = faceArray[0].getLeftEyeBlink();
+                rightEyeBlink = faceArray[0].getRightEyeBlink();
+                faceRollValue = faceArray[0].getRoll();
+                gazePointValue = faceArray[0].getEyeGazePoint();
+                pitch = faceArray[0].getPitch();
+                yaw = faceArray[0].getYaw();
+                horizontalGaze = faceArray[0].getEyeHorizontalGazeAngle();
+                verticalGaze = faceArray[0].getEyeVerticalGazeAngle();
 
-                if(info){
-                    setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue, horizontalGaze, verticalGaze);
-                }
+                if(info) setUI(numFaces, smileValue, leftEyeBlink, rightEyeBlink, faceRollValue, yaw, pitch, gazePointValue, horizontalGaze, verticalGaze);
 
-                // Send notification to the driver if there is a symptom
-                // if ( ... )
+                // How to send notification through native notification system
                 /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
                 mBuilder.setSmallIcon(R.drawable.ic_launcher);
                 mBuilder.setContentTitle("Custom title");
@@ -522,15 +500,12 @@ public class CameraPreviewActivity extends Activity implements Camera.PreviewCal
                 mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
             }
         }
-        else{
-
-        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         // exit activity
-        if ((keyCode == KeyEvent.KEYCODE_BACK)){
+        if (keyCode == KeyEvent.KEYCODE_BACK){
             handler.removeCallbacks(periodicTask);
             stopCamera();
             finish();
