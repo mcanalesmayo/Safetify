@@ -31,5 +31,6 @@ Buttons:
 ## Known issues
 Known major issues that we are aware of and we are working to resolve as soon as possible:
 * In few cases (e.g. wearing glasses) the calibrating process could not work as expected, so it may cause the application not working properly.
+* The camera may be flipped in some devices.
 
 Please, feel free to report any kind of issue [here](https://github.com/MarcosCM/Safetify/issues/new).
