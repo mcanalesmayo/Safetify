@@ -8,6 +8,8 @@
 ## Brief description
 The application uses facial recognition to detect previous symptoms of somnolence, fatigue, distractions, etc in order to alert the driver.
 
+Please, check out our [promo video](https://twitter.com/CokeJorge_/status/781632406373724160).
+
 ## Requirements
 * Android version >= 4.1.x
 * Qualcomm Snapdragon processor
